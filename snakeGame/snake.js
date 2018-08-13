@@ -92,12 +92,16 @@ function collision(head, array){
 
 function draw(){
     
+    // draw the ground image
     ctx.drawImage(ground,0,0);
     
+    // draw the boxes for the snake
     for( let i = 0; i < snake.length ; i++){
+        // the "head" of the snake is green; otherwise white
         ctx.fillStyle = ( i == 0 ) ? "green" : "white";
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
         
+        // create a red highlight over the box
         ctx.strokeStyle = "red";
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
     }
@@ -116,33 +120,31 @@ function draw(){
     
     // if the snake eats the food
     if(snakeX == food.x && snakeY == food.y){
-        score++;
         eat.play();
+        score++;
         // generate a new food object randomly
         food = {
             x : Math.floor(Math.random()*17+1) * box,
             y : Math.floor(Math.random()*15+3) * box
         }
-        // we don't remove the tail
-    }else{
-        // remove the tail
+    }else{ // otherwise...
+           // remove the tail
         snake.pop();
     }
     
-    // add new Head
-    
+    // initialize new Head
     let newHead = {
         x : snakeX,
         y : snakeY
     }
     
     // if the snake hits the border or itself--game over
-    
     if(snakeX < box || snakeX > 17 * box || snakeY < 3*box || snakeY > 17 * box || collision(newHead, snake)){
         clearInterval(game);
         dead.play();
     }
     
+    // add newHead to the snake object
     snake.unshift(newHead);
     
     ctx.fillStyle = "white";
